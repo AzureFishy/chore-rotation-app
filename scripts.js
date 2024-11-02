@@ -624,8 +624,8 @@ document.getElementById('set-week').addEventListener('change', (e) => {
     // Initialize Application
 const init = () => {
     initializeState();
-    assignChores();  // Add this line
     setupEventListeners();
+    assignChores();  // Add this line
     updateUI();
 };
 
