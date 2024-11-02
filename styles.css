@@ -1,0 +1,140 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+h1, h2, h3 {
+  color: #333;
+}
+
+.week-info, .set-week-cycle, .export-import {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.week-info span, .set-week-cycle .set-inputs label, .export-import label {
+  font-size: 1.1em;
+}
+
+button {
+  padding: 6px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.set-week-cycle, .export-import {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.set-week-cycle .set-inputs, .export-import .buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.assignments, .history, .completed-chores, .settings {
+  margin-bottom: 30px;
+}
+
+#assignments-list, #history-list, #completed-chores-list, #people-list, #chores-list {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #e2e2e2;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li span {
+  flex-grow: 1;
+}
+
+li button {
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  border-radius: 4px;
+}
+
+input[type="text"], input[type="number"], textarea {
+  padding: 6px;
+  width: 200px;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 10px;
+  font-family: monospace;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.export-import .buttons {
+  margin-top: 10px;
+}
+
+.export-import button {
+  width: 150px;
+}
+
+.completed-chores-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.completed-chores-table th,
+.completed-chores-table td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.completed-chores-table th {
+    background-color: #f5f5f5;
+}
+
+.completed-chores-table .current-week {
+    color: blue;
+}
+
+.history-item {
+    margin-bottom: 5px;
+}
+
+.current-assignment {
+    color: blue;
+    font-weight: bold;
+}
