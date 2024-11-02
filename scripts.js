@@ -91,33 +91,33 @@
     };
 
     // Assign Chores with Enhanced Logic
-const assignChores = () => {
-    if (State.siblings.length === 0 || State.chores.length === 0) {
-        displayMessage("Please add at least one person and one chore in settings.", "error");
-        return;
-    }
+    const assignChores = () => {
+        if (State.siblings.length === 0 || State.chores.length === 0) {
+            displayMessage("Please add at least one person and one chore in settings.", "error", true);
+            return;
+        }
 
-    // First increment the week unless we're just starting
-    if (State.assignments.length > 0) {
-        State.week += 1;
-    }
+        // First increment the week unless we're just starting
+        if (State.assignments.length > 0) {
+            State.week += 1;
+        }
 
-    // Then check if cycle is complete
-    if (isCycleComplete()) {
-        State.cycleNumber += 1;
-        State.week = 1;
-        State.siblings.forEach(sibling => {
-            State.personChores[sibling].clear();
-        });
-    }
+        // Then check if cycle is complete
+        if (isCycleComplete()) {
+            State.cycleNumber += 1;
+            State.week = 1;
+            State.siblings.forEach(sibling => {
+                State.personChores[sibling].clear();
+            });
+        }
 
-    // Get last week's chores to avoid repetition
-    const lastWeekChores = new Set(State.assignments.map(a => a.chore));
+        // Get last week's chores to avoid repetition
+        const lastWeekChores = new Set(State.assignments.map(a => a.chore));
 
-    // Prepare for new assignments
-    const newAssignments = [];
-    const usedChoresThisWeek = new Set();
-    const weekSeed = State.seed + State.week + (State.cycleNumber * 1000);
+        // Prepare for new assignments
+        const newAssignments = [];
+        const usedChoresThisWeek = new Set();
+        const weekSeed = State.seed + State.week + (State.cycleNumber * 1000);
 
         // Shuffle siblings based on seed
         const shuffledSiblings = shuffleArray([...State.siblings], weekSeed);
@@ -182,14 +182,15 @@ const assignChores = () => {
             }
 
             if (!assigned) {
-                displayMessage(`Unable to find suitable chore assignment for ${person}. Please check your chore distribution.`, "error");
+                displayMessage(`Unable to find suitable chore assignment for ${person}. Please check your chore distribution.`, "error", true);
             }
         });
 
-    // Update state and UI
-    State.assignments = newAssignments;
-    updateUI();
-};
+        // Update state and UI
+        State.assignments = newAssignments;
+        updateUI();
+    };
+
     // Shuffle Array Based on Seed
     const shuffleArray = (array, seed) => {
         for (let i = array.length - 1; i > 0; i--) {
@@ -206,7 +207,7 @@ const assignChores = () => {
         const totalWeeks = Math.floor(daysDiff / 7) + 1;
 
         if (State.siblings.length === 0 || State.chores.length === 0) {
-            displayMessage("Please add at least one person and one chore in settings.", "error");
+            displayMessage("Please add at least one person and one chore in settings.", "error", true);
             return null;
         }
 
@@ -400,41 +401,41 @@ const assignChores = () => {
             initializeState();
             State.assignments = [];
             updateUI();
-            assignChores();  // Add this line to immediately assign chores after reset
+            assignChores();  // Immediately assign chores after reset
         }
     };
 
     // Jump to Specific Week and Cycle
-const jumpToWeekCycle = (targetCycle, targetWeek) => {
-    if (targetCycle < 1 || targetWeek < 1) {
-        displayMessage("Cycle and Week numbers must be positive integers.", "error");
-        return;
-    }
-
-    // Reset state
-    State.week = 1;
-    State.cycleNumber = 1;
-    initializeState();
-    State.assignments = [];
-
-    // If we're going to Week 1, we need to do one assignment without incrementing
-    if (targetCycle === 1 && targetWeek === 1) {
-        assignChores();
-        return;
-    }
-
-    // For other weeks, process normally
-    while (State.cycleNumber < targetCycle || (State.cycleNumber === targetCycle && State.week < targetWeek)) {
-        assignChores();
-        // Prevent infinite loops
-        if (State.cycleNumber > targetCycle + 100 || State.week > targetWeek + 100) {
-            displayMessage("Error in assigning chores. Please check your inputs.", "error");
+    const jumpToWeekCycle = (targetCycle, targetWeek) => {
+        if (targetCycle < 1 || targetWeek < 1) {
+            displayMessage("Cycle and Week numbers must be positive integers.", "error", true);
             return;
         }
-    }
 
-    updateUI();
-};
+        // Reset state
+        State.week = 1;
+        State.cycleNumber = 1;
+        initializeState();
+        State.assignments = [];
+
+        // If we're going to Week 1, we need to do one assignment without incrementing
+        if (targetCycle === 1 && targetWeek === 1) {
+            assignChores();
+            return;
+        }
+
+        // For other weeks, process normally
+        while (State.cycleNumber < targetCycle || (State.cycleNumber === targetCycle && State.week < targetWeek)) {
+            assignChores();
+            // Prevent infinite loops
+            if (State.cycleNumber > targetCycle + 100 || State.week > targetWeek + 100) {
+                displayMessage("Error in assigning chores. Please check your inputs.", "error", true);
+                return;
+            }
+        }
+
+        updateUI();
+    };
 
     // Event Listeners
     const setupEventListeners = () => {
@@ -465,29 +466,31 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
                 State.seed = newSeed;
                 jumpToWeekCycle(State.cycleNumber, State.week);
             } else {
-                displayMessage("Seed must be a valid number.", "error");
+                displayMessage("Seed must be a valid number.", "error", true);
             }
         });
 
-document.getElementById('set-cycle').addEventListener('change', (e) => {
-    const targetCycle = Number(e.target.value);
-    const targetWeek = Number(document.getElementById('set-week').value);
-    if (isNaN(targetCycle) || isNaN(targetWeek)) {
-        displayMessage("Please enter valid numbers for Cycle and Week.", "error");
-        return;
-    }
-    jumpToWeekCycle(targetCycle, targetWeek);
-});
+        // Cycle Change
+        document.getElementById('set-cycle').addEventListener('change', (e) => {
+            const targetCycle = Number(e.target.value);
+            const targetWeek = Number(document.getElementById('set-week').value);
+            if (isNaN(targetCycle) || isNaN(targetWeek)) {
+                displayMessage("Please enter valid numbers for Cycle and Week.", "error", true);
+                return;
+            }
+            jumpToWeekCycle(targetCycle, targetWeek);
+        });
 
-document.getElementById('set-week').addEventListener('change', (e) => {
-    const targetWeek = Number(e.target.value);
-    const targetCycle = Number(document.getElementById('set-cycle').value);
-    if (isNaN(targetCycle) || isNaN(targetWeek)) {
-        displayMessage("Please enter valid numbers for Cycle and Week.", "error");
-        return;
-    }
-    jumpToWeekCycle(targetCycle, targetWeek);
-});
+        // Week Change
+        document.getElementById('set-week').addEventListener('change', (e) => {
+            const targetWeek = Number(e.target.value);
+            const targetCycle = Number(document.getElementById('set-cycle').value);
+            if (isNaN(targetCycle) || isNaN(targetWeek)) {
+                displayMessage("Please enter valid numbers for Cycle and Week.", "error", true);
+                return;
+            }
+            jumpToWeekCycle(targetCycle, targetWeek);
+        });
 
         // Export/Import Functionality
         document.getElementById('copy-button').addEventListener('click', copyToClipboard);
@@ -524,10 +527,10 @@ document.getElementById('set-week').addEventListener('change', (e) => {
             if (successful) {
                 displayMessage('Settings copied to clipboard!', "success");
             } else {
-                displayMessage('Failed to copy settings.', "error");
+                displayMessage('Failed to copy settings.', "error", true);
             }
         } catch (err) {
-            displayMessage('Error copying to clipboard.', "error");
+            displayMessage('Error copying to clipboard.', "error", true);
         }
     };
 
@@ -535,13 +538,13 @@ document.getElementById('set-week').addEventListener('change', (e) => {
     const applySettings = () => {
         const text = document.getElementById('export-import-text').value.trim();
         if (!text) {
-            displayMessage("Please enter settings to apply.", "error");
+            displayMessage("Please enter settings to apply.", "error", true);
             return;
         }
 
         const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
         if (lines.length !== 3) {
-            displayMessage("Invalid format. Please ensure there are exactly three lines:\n1. Chores\n2. Names\n3. Cycle, Week, Seed", "error");
+            displayMessage("Invalid format. Please ensure there are exactly three lines:\n1. Chores\n2. Names\n3. Cycle, Week, Seed", "error", true);
             return;
         }
 
@@ -550,21 +553,21 @@ document.getElementById('set-week').addEventListener('change', (e) => {
         // Parse chores
         const parsedChores = choresLine.split(',').map(chore => chore.trim()).filter(chore => chore.length > 0);
         if (parsedChores.length === 0) {
-            displayMessage("Invalid chores list. Please enter at least one chore.", "error");
+            displayMessage("Invalid chores list. Please enter at least one chore.", "error", true);
             return;
         }
 
         // Parse names
         const parsedNames = namesLine.split(',').map(name => name.trim()).filter(name => name.length > 0);
         if (parsedNames.length === 0) {
-            displayMessage("Invalid names list. Please enter at least one name.", "error");
+            displayMessage("Invalid names list. Please enter at least one name.", "error", true);
             return;
         }
 
         // Parse cycle, week, seed
         const cycleWeekSeedParts = cycleWeekSeedLine.split(',').map(part => part.trim());
         if (cycleWeekSeedParts.length !== 3) {
-            displayMessage("Invalid Cycle, Week, Seed line. Please enter three comma-separated numbers.", "error");
+            displayMessage("Invalid Cycle, Week, Seed line. Please enter three comma-separated numbers.", "error", true);
             return;
         }
 
@@ -574,7 +577,7 @@ document.getElementById('set-week').addEventListener('change', (e) => {
             isNaN(parsedWeek) || parsedWeek < 1 ||
             isNaN(parsedSeed)
         ) {
-            displayMessage("Cycle and Week must be positive integers, and Seed must be a number.", "error");
+            displayMessage("Cycle and Week must be positive integers, and Seed must be a number.", "error", true);
             return;
         }
 
@@ -595,39 +598,83 @@ document.getElementById('set-week').addEventListener('change', (e) => {
             assignChores();
             // Prevent infinite loops
             if (State.cycleNumber > parsedCycle + 100 || State.week > parsedWeek + 100) {
-                displayMessage("Error in assigning chores. Please check your inputs.", "error");
+                displayMessage("Error in assigning chores. Please check your inputs.", "error", true);
                 return;
             }
         }
 
         updateUI();
-        displayMessage('Settings applied successfully!', "success");
+        displayMessage('Settings applied successfully!', "success", true);
     };
 
-    // Display Messages to User
-    const displayMessage = (message, type) => {
-        // Create a message div
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${type}`;
-        messageDiv.textContent = message;
+const displayMessage = (message, type, fixed = false) => {
+    // Create a message div
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = message;
 
+    if (fixed) {
+        // Remove existing message with the same text to re-trigger animation
+        const existingMessage = Array.from(document.querySelectorAll('.fixed-message-container .message')).find(msg => msg.textContent === message);
+        if (existingMessage) {
+            // Trigger fade-out on the existing message
+            existingMessage.classList.add('fade-out');
+            existingMessage.addEventListener('animationend', () => {
+                existingMessage.remove();
+            });
+        }
+
+        // Add ARIA attribute for accessibility
+        messageDiv.setAttribute('aria-live', 'assertive');
+
+        // Append to fixed message container
+        const fixedContainer = document.querySelector('.fixed-message-container');
+        fixedContainer.appendChild(messageDiv);
+
+        // Add click event to remove the message on tap
+        messageDiv.addEventListener('click', () => {
+            messageDiv.classList.add('fade-out');
+            messageDiv.addEventListener('animationend', () => {
+                messageDiv.remove();
+            });
+        });
+        
+                // Remove the message after 3 seconds with fade-out animation
+        setTimeout(() => {
+            messageDiv.classList.add('fade-out');
+            messageDiv.addEventListener('animationend', () => {
+                messageDiv.remove();
+            });
+        }, 3000);
+        
+        
+    } else {
         // Insert the message at the top of the container
         const container = document.querySelector('.container');
         container.insertBefore(messageDiv, container.firstChild);
 
-        // Remove the message after 3 seconds
+        // Remove the message after 3 seconds with fade-out animation
         setTimeout(() => {
-            messageDiv.remove();
+            messageDiv.classList.add('fade-out');
+            messageDiv.addEventListener('animationend', () => {
+                messageDiv.remove();
+            });
         }, 3000);
-    };
+    }
+};
 
     // Initialize Application
-const init = () => {
-    initializeState();
-    setupEventListeners();
-    assignChores();  // Add this line
-    updateUI();
-};
+    const init = () => {
+        // Create fixed message container
+        const fixedMessageContainer = document.createElement('div');
+        fixedMessageContainer.className = 'fixed-message-container';
+        document.body.appendChild(fixedMessageContainer);
+
+        initializeState();
+        setupEventListeners();
+        assignChores();  // Immediately assign chores after initialization
+        updateUI();
+    };
 
     // Start the application
     document.addEventListener('DOMContentLoaded', init);

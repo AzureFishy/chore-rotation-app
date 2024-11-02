@@ -342,3 +342,40 @@ li button.remove-btn:hover {
   min-height: 120px;
   margin-bottom: var(--spacing-md);
 }
+
+/* Fixed message container */
+.fixed-message-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none; /* Allow clicks to pass through except on messages */
+    z-index: 1000; /* Ensure it's on top */
+}
+
+/* Fixed message styling */
+.fixed-message-container .message {
+    width: 90%;
+    max-width: 600px;
+    margin: var(--spacing-md) 0;
+    pointer-events: all; /* Enable interaction with messages */
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+/* Fade-out animation */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.message.fade-out {
+    animation: fadeOut 0.5s forwards;
+}
