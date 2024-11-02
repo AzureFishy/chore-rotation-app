@@ -17,15 +17,18 @@ h1, h2, h3 {
   color: #333;
 }
 
-.week-info, .set-week-cycle, .export-import {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 20px;
+.week-info input[type="number"] {
+    width: 60px;
+    padding: 4px;
+    margin: 0 10px;
 }
 
-.week-info span, .set-week-cycle .set-inputs label, .export-import label {
-  font-size: 1.1em;
+.week-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 button {
@@ -36,17 +39,6 @@ button {
 
 button:hover {
   opacity: 0.8;
-}
-
-.set-week-cycle, .export-import {
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.set-week-cycle .set-inputs, .export-import .buttons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .assignments, .history, .completed-chores, .settings {
@@ -102,6 +94,9 @@ textarea {
 }
 
 .export-import .buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-top: 10px;
 }
 
@@ -130,6 +125,11 @@ textarea {
     color: blue;
 }
 
+.history-item .previous-assignment {
+    color: darkblue;
+    font-weight: bold;
+}
+
 .history-item {
     margin-bottom: 5px;
 }
@@ -137,4 +137,64 @@ textarea {
 .current-assignment {
     color: blue;
     font-weight: bold;
+}
+
+.completed-chores-table td.done {
+    text-decoration: line-through;
+    color: green;
+}
+
+.completed-chores-table td.assigned {
+    color: blue;
+}
+
+/* New Styles for Footer and Instructions */
+
+.footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+}
+
+.footer hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.copyright {
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+.instructions-section {
+    margin-bottom: 60px; /* Increased from 40px to 60px for more spacing */
+}
+
+.instructions-section > a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.instructions-section > a:hover {
+    background: #e5e5e5;
+}
+
+.instructions-content {
+    display: none;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.instructions-content.show {
+    display: block;
 }

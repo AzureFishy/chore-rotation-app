@@ -9,28 +9,18 @@
     <div class="container">
         <h1>Weekly Chore Assignment</h1>
         <div class="week-info">
-            <span>Cycle: <span id="cycle-number">1</span></span>
-            <span>Week: <span id="week-number">1</span></span>
-            <span>Seed: <input type="number" id="seed-input" value="1" style="width: 60px;"></span>
+            <label for="set-cycle">Cycle:</label>
+            <input type="number" id="set-cycle" min="1" value="1">
+            <label for="set-week">Week:</label>
+            <input type="number" id="set-week" min="1" value="1">
+            <label for="seed-input">Seed:</label>
+            <input type="number" id="seed-input" value="1">
+            <button id="today-button">Today</button>
+            <button id="go-button">Go</button>
             <button id="reset-button">Reset</button>
             <button id="assign-button">Assign New Chores</button>
         </div>
-        <div class="set-week-cycle">
-            <h2>Jump to Specific Week and Cycle</h2>
-            <div class="set-inputs">
-                <label for="set-cycle">Cycle:</label>
-                <input type="number" id="set-cycle" min="1" value="1" style="width: 60px;">
-                <label for="set-week">Week:</label>
-                <input type="number" id="set-week" min="1" value="1" style="width: 60px;">
-                <button id="go-button">Go</button>
-            </div>
-        </div>
-        <div class="assignments">
-            <h2>This Week's Assignments</h2>
-            <div id="assignments-list">
-                <p>Click "Assign New Chores" to generate assignments for the week.</p>
-            </div>
-        </div>
+        <!-- Removed the entire "This Week's Assignments" section -->
         <div class="history">
             <h2>Recent History</h2>
             <div id="history-list"></div>
@@ -60,6 +50,40 @@
             <div class="buttons">
                 <button id="copy-button">Copy to Clipboard</button>
                 <button id="apply-button">Apply</button>
+            </div>
+        </div>
+
+        <!-- Added Instructions Section -->
+        <div class="instructions-section">
+            <a href="#">Instructions ▼</a>
+            <div class="instructions-content">
+                <h3>Quick Start</h3>
+                <ol>
+                    <li>Add family members in the Settings section</li>
+                    <li>Add chores that need to be done regularly</li>
+                    <li>Click "Assign New Chores" to distribute tasks</li>
+                    <li>Use "Today" to jump to the current date</li>
+                    <li>Use "Reset" to start over from week 1</li>
+                </ol>
+                <h3>Tips & Tricks</h3>
+                <ul>
+                    <li>The system automatically tracks which chores each person has done in a cycle</li>
+                    <li>When everyone has done all chores once, a new cycle begins</li>
+                    <li>Use Export/Import to save or transfer your settings</li>
+                    <li>You can manually navigate to any week/cycle using the number inputs</li>
+                    <li>Changing the seed will create different random assignments while maintaining fairness</li>
+                    <li>The history section shows the last 7 chores for each person</li>
+                    <li>Blue text indicates current assignments</li>
+                    <li>Strikethrough text shows completed chores from previous weeks</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Added Footer Section -->
+        <div class="footer">
+            <hr>
+            <div class="copyright">
+                Copyright 2024 AzureFishy, GNU License 3.0
             </div>
         </div>
     </div>
