@@ -220,6 +220,7 @@ li button.remove-btn:hover {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    display: block; /* Ensure it's a block-level element */
 }
 
 .history-item .current-assignment {
