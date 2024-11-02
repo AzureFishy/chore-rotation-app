@@ -91,24 +91,33 @@
     };
 
     // Assign Chores with Enhanced Logic
-    const assignChores = () => {
-        if (State.siblings.length === 0 || State.chores.length === 0) {
-            displayMessage("Please add at least one person and one chore in settings.", "error");
-            return;
-        }
+const assignChores = () => {
+    if (State.siblings.length === 0 || State.chores.length === 0) {
+        displayMessage("Please add at least one person and one chore in settings.", "error");
+        return;
+    }
 
-        // Check if cycle is complete
-        if (isCycleComplete()) {
-            resetCycle();
-        }
+    // First increment the week unless we're just starting
+    if (State.assignments.length > 0) {
+        State.week += 1;
+    }
 
-        // Get last week's chores to avoid repetition
-        const lastWeekChores = new Set(State.assignments.map(a => a.chore));
+    // Then check if cycle is complete
+    if (isCycleComplete()) {
+        State.cycleNumber += 1;
+        State.week = 1;
+        State.siblings.forEach(sibling => {
+            State.personChores[sibling].clear();
+        });
+    }
 
-        // Prepare for new assignments
-        const newAssignments = [];
-        const usedChoresThisWeek = new Set();
-        const weekSeed = State.seed + State.week + (State.cycleNumber * 1000);
+    // Get last week's chores to avoid repetition
+    const lastWeekChores = new Set(State.assignments.map(a => a.chore));
+
+    // Prepare for new assignments
+    const newAssignments = [];
+    const usedChoresThisWeek = new Set();
+    const weekSeed = State.seed + State.week + (State.cycleNumber * 1000);
 
         // Shuffle siblings based on seed
         const shuffledSiblings = shuffleArray([...State.siblings], weekSeed);
@@ -177,12 +186,10 @@
             }
         });
 
-        // Update state and UI
-        State.assignments = newAssignments;
-        State.week += 1;
-        updateUI();
-    };
-
+    // Update state and UI
+    State.assignments = newAssignments;
+    updateUI();
+};
     // Shuffle Array Based on Seed
     const shuffleArray = (array, seed) => {
         for (let i = array.length - 1; i > 0; i--) {
@@ -190,15 +197,6 @@
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
-    };
-
-    // Reset Cycle
-    const resetCycle = () => {
-        State.siblings.forEach(sibling => {
-            State.personChores[sibling].clear();
-        });
-        State.cycleNumber += 1;
-        State.week = 1;
     };
 
     // Calculate Cycle and Week from a given date
@@ -402,34 +400,41 @@
             initializeState();
             State.assignments = [];
             updateUI();
+            assignChores();  // Add this line to immediately assign chores after reset
         }
     };
 
     // Jump to Specific Week and Cycle
-    const jumpToWeekCycle = (targetCycle, targetWeek) => {
-        if (targetCycle < 1 || targetWeek < 1) {
-            displayMessage("Cycle and Week numbers must be positive integers.", "error");
+const jumpToWeekCycle = (targetCycle, targetWeek) => {
+    if (targetCycle < 1 || targetWeek < 1) {
+        displayMessage("Cycle and Week numbers must be positive integers.", "error");
+        return;
+    }
+
+    // Reset state
+    State.week = 1;
+    State.cycleNumber = 1;
+    initializeState();
+    State.assignments = [];
+
+    // If we're going to Week 1, we need to do one assignment without incrementing
+    if (targetCycle === 1 && targetWeek === 1) {
+        assignChores();
+        return;
+    }
+
+    // For other weeks, process normally
+    while (State.cycleNumber < targetCycle || (State.cycleNumber === targetCycle && State.week < targetWeek)) {
+        assignChores();
+        // Prevent infinite loops
+        if (State.cycleNumber > targetCycle + 100 || State.week > targetWeek + 100) {
+            displayMessage("Error in assigning chores. Please check your inputs.", "error");
             return;
         }
+    }
 
-        // Reset state
-        State.week = 1;
-        State.cycleNumber = 1;
-        initializeState();
-        State.assignments = [];
-
-        // Assign chores up to the targetCycle and targetWeek
-        while (State.cycleNumber < targetCycle || (State.cycleNumber === targetCycle && State.week < targetWeek)) {
-            assignChores();
-            // Prevent infinite loops
-            if (State.cycleNumber > targetCycle + 100 || State.week > targetWeek + 100) {
-                displayMessage("Error in assigning chores. Please check your inputs.", "error");
-                return;
-            }
-        }
-
-        updateUI();
-    };
+    updateUI();
+};
 
     // Event Listeners
     const setupEventListeners = () => {
@@ -458,22 +463,31 @@
             const newSeed = Number(e.target.value);
             if (!isNaN(newSeed)) {
                 State.seed = newSeed;
-                resetSystem();
+                jumpToWeekCycle(State.cycleNumber, State.week);
             } else {
                 displayMessage("Seed must be a valid number.", "error");
             }
         });
 
-        // Go Button
-        document.getElementById('go-button').addEventListener('click', () => {
-            const targetCycle = Number(document.getElementById('set-cycle').value);
-            const targetWeek = Number(document.getElementById('set-week').value);
-            if (isNaN(targetCycle) || isNaN(targetWeek)) {
-                displayMessage("Please enter valid numbers for Cycle and Week.", "error");
-                return;
-            }
-            jumpToWeekCycle(targetCycle, targetWeek);
-        });
+document.getElementById('set-cycle').addEventListener('change', (e) => {
+    const targetCycle = Number(e.target.value);
+    const targetWeek = Number(document.getElementById('set-week').value);
+    if (isNaN(targetCycle) || isNaN(targetWeek)) {
+        displayMessage("Please enter valid numbers for Cycle and Week.", "error");
+        return;
+    }
+    jumpToWeekCycle(targetCycle, targetWeek);
+});
+
+document.getElementById('set-week').addEventListener('change', (e) => {
+    const targetWeek = Number(e.target.value);
+    const targetCycle = Number(document.getElementById('set-cycle').value);
+    if (isNaN(targetCycle) || isNaN(targetWeek)) {
+        displayMessage("Please enter valid numbers for Cycle and Week.", "error");
+        return;
+    }
+    jumpToWeekCycle(targetCycle, targetWeek);
+});
 
         // Export/Import Functionality
         document.getElementById('copy-button').addEventListener('click', copyToClipboard);
@@ -487,7 +501,7 @@
             e.preventDefault();
             const content = document.querySelector('.instructions-content');
             content.classList.toggle('show');
-            e.target.textContent = content.classList.contains('show') ? 'Instructions ▲' : 'Instructions ▼';
+            e.target.textContent = content.classList.contains('show') ? 'Instructions ▼' : 'Instructions ▲';
         });
     };
 
@@ -608,11 +622,12 @@
     };
 
     // Initialize Application
-    const init = () => {
-        initializeState();
-        setupEventListeners();
-        updateUI();
-    };
+const init = () => {
+    initializeState();
+    assignChores();  // Add this line
+    setupEventListeners();
+    updateUI();
+};
 
     // Start the application
     document.addEventListener('DOMContentLoaded', init);
