@@ -1,73 +1,86 @@
-/* Base styles and variables */
+/* ====================
+Section 1 - Variables and Constants
+==================== */
 :root {
-  --primary-color: #3498db;
-  --primary-dark: #2980b9;
-  --background-color: #f5f7fa;
-  --surface-color: #ffffff;
-  --text-color: #2c3e50;
-  --border-color: #e1e8ed;
-  --success-color: #44aa66;
-  --error-color: #e74c3c;
-  --spacing-xs: 0.25rem;  /* 4px - base unit */
-  --spacing-sm: 0.5rem;   /* 8px - 2x base */
-  --spacing-md: 0.75rem;  /* 12px - 3x base */
-  --spacing-lg: 1.25rem;  /* 20px - 5x base */
-  --spacing-xl: 2rem;     /* 32px - 8x base */
-  --border-radius: 0.75rem;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);    /* Change to 4px - 0 1px 4px */
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);    /* Change to 8px - 0 4px 8px */
-  --transition: all 0.3s ease;
+    --primary-color: #3498db;
+    --primary-dark: #2980b9;
+    --background-color: #f5f7fa;
+    --surface-color: #ffffff;
+    --text-color: #2c3e50;
+    --border-color: #e1e8ed;
+    --success-color: #44aa66;
+    --error-color: #e74c3c;
+    --spacing-xs: 0.25rem;  /* 4px */
+    --spacing-sm: 0.5rem;   /* 8px */
+    --spacing-md: 0.75rem;  /* 12px */
+    --spacing-lg: 1.25rem;  /* 20px */
+    --spacing-xl: 2rem;     /* 32px */
+    --border-radius: 0.75rem;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);    /* Change to 4px - 0 1px 4px */
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);    /* Change to 8px - 0 4px 8px */
+    --transition: all 0.3s ease;
 }
 
-/* Global Reset and Base Styles */
+/* ====================
+Section 2 - Reset and Base Styles
+==================== */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  padding: var(--spacing-md);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: var(--spacing-md);
 }
 
-/* Container and Layout */
+/* ====================
+Section 3 - Layout and Grid System
+==================== */
 .container {
-  max-width: 100%;
-  margin: 0 auto;
-  background: var(--surface-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  padding: var(--spacing-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
+    max-width: 100%;
+    margin: 0 auto;
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
 }
 
-/* Typography */
+/* ====================
+Section 4 - Typography
+==================== */
 h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-color);
-  margin-bottom: var(--spacing-md);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
 }
 
 h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
 }
 
 h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
 }
+
+/* ====================
+Section 5 - Components and UI Elements
+==================== */
+
 
 /* Week Info Section */
 .week-info {
@@ -99,121 +112,164 @@ h3 {
     min-width: 0;
 }
 
+.input-group input[type="date"] {
+    font-size: 1rem; /* 16px */
+    padding: var(--spacing-md); /* 12px */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(50%);
+    cursor: pointer;
+}
+
+/* Add hover effect for date picker */
+.input-group input[type="date"]:hover {
+    border-color: var(--primary-dark);
+}
+
 .button-controls {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
 }
 
+/* Button Styles */
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0.5em;
+}
+
+button:hover {
+    background-color: var(--primary-dark);
+}
+
 /* Input Styles */
 input[type="text"],
 input[type="number"],
 textarea {
-  width: 100%;
-  padding: var(--spacing-md);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-  transition: var(--transition);
-  appearance: none;
-  -webkit-appearance: none;
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus,
 textarea:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
-
-/* Button Styles */
-button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius);
-  padding: var(--spacing-md) var(--spacing-lg);
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin: 0.5em;
-}
-
-button:hover {
-  background-color: var(--primary-dark);
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
 /* List Styles */
 ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 li {
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: var(--transition);
-  gap: var(--spacing-sm);
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    gap: var(--spacing-sm);
 }
 
 li:hover {
-  box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-sm);
 }
 
 li button.remove-btn {
-  background-color: var(--error-color);
-  color: white;
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  min-height: 36px;
-  padding: 0;
-  flex-shrink: 0;
-  font-size: 1rem;
-  border-radius: calc(var(--border-radius) / 2);
+    background-color: var(--error-color);
+    color: white;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 1rem;
+    border-radius: calc(var(--border-radius) / 2);
 }
 
 li button.remove-btn:hover {
-  background-color: #c0392b;
+    background-color: #c0392b;
+}
+
+/* Style for the Display Settings checkbox */
+.settings-section .input-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.settings-section .input-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.settings-section .input-group label {
+    font-size: 1rem;
+    cursor: pointer;
 }
 
 /* Table Styles */
 .completed-chores-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-top: var(--spacing-md);
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: var(--spacing-md);
 }
 
 .completed-chores-table th,
 .completed-chores-table td {
-  padding: var(--spacing-md);
-  text-align: left;
-  border: 1px solid var(--border-color);
+    padding: var(--spacing-md);
+    text-align: left;
+    border: 1px solid var(--border-color);
 }
 
 .completed-chores-table th {
-  background-color: var(--background-color);
-  font-weight: 600;
+    background-color: var(--background-color);
+    font-weight: 600;
 }
 
 .completed-chores-table td.assigned {
     color: var(--success-color);
     font-weight: bold;
+}
+
+.completed-chores-table td.done {
+	text-decoration: line-through;
 }
 
 .completed-chores {
@@ -232,115 +288,54 @@ li button.remove-btn:hover {
     text-decoration: line-through;
 }
 
-@media (max-width: 767px) {
-    .completed-chores {
-        background: 
-            linear-gradient(to left, var(--surface-color) 0%, transparent 2%) 100% 0,
-            linear-gradient(to right, var(--surface-color) 0%, transparent 2%) 0 0;
-        background-repeat: no-repeat;
-        background-size: 50px 100%;
-    }
-}
-
 /* Message Styles */
 .message {
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius);
-  margin-bottom: var(--spacing-md);
-  text-align: center;
-  animation: slideIn 0.3s ease;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+    animation: slideIn 0.3s ease;
 }
 
 .message.success {
-  background-color: rgba(46, 204, 113, 0.1);
-  color: var(--success-color);
+    background-color: rgba(46, 204, 113, 0.1);
+    color: var(--success-color);
 }
 
 .message.error {
-  background-color: rgba(231, 76, 60, 0.1);
-  color: var(--error-color);
-}
-
-/* Responsive Design */
-@media (min-width: 768px) {
-  .container {
-    max-width: 900px;
-    padding: var(--spacing-xl);
-  }
-
-  .button-controls {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-md);
-  }
-
-  .button-controls button {
-    width: 100%;
-    margin: 0;  /* Remove the margin we added earlier */
-  }
-
-  .export-import .buttons {
-    display: flex;
-    gap: var(--spacing-md);
-  }
-}
-
-/* Animations */
-@keyframes slideIn {
-  from {
-    transform: translateY(-10px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--background-color);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
-  border-radius: 4px;
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--error-color);
 }
 
 /* Instructions Section */
 .instructions-section > a {
-  display: block;
-  padding: var(--spacing-md);
-  background: var(--background-color);
-  border-radius: var(--border-radius);
-  margin-bottom: var(--spacing-md);
-  text-decoration: none;
-  color: var(--text-color);
-  font-weight: 500;
+    display: block;
+    padding: var(--spacing-md);
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-md);
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
 }
 
 .instructions-content {
-  display: none;  /* Add this line */
-  background: var(--background-color);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius);
-  margin-top: var(--spacing-sm);
+    display: none;  /* Add this line */
+    background: var(--background-color);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    margin-top: var(--spacing-sm);
 }
 
 .instructions-content.show {
-  display: block;
+    display: block;
 }
 
 /* Export/Import Section */
 .export-import textarea {
-  font-family: monospace;
-  min-height: 120px;
-  margin-bottom: var(--spacing-md);
+    font-family: monospace;
+    min-height: 120px;
+    margin-bottom: var(--spacing-md);
 }
 
 /* Fixed message container */
@@ -379,3 +374,244 @@ li button.remove-btn:hover {
 .message.fade-out {
     animation: fadeOut 0.5s forwards;
 }
+
+/* Tag Styles */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.2rem 0.4rem; /* Further reduced padding for slimmer chips */
+    border-radius: 0.4rem; /* Adjusted for a more subtle roundness */
+    font-size: 0.85rem; /* Slightly smaller font for a sleek appearance */
+    cursor: pointer; /* Changed to pointer to indicate clickability */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.tag:hover {
+    background-color: var(--primary-dark);
+    transform: scale(1.02); /* Subtle scale on hover for interactivity */
+}
+
+.tag .remove-tag {
+    background: none;
+    border: none;
+    color: white;
+    margin-left: 0.2rem; /* Further reduced margin */
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    font-size: 0.8rem; /* Slightly smaller 'X' button */
+}
+
+.tag .remove-tag:hover {
+    color: #ffdddd;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem; /* Further reduced gap between chips */
+    margin-top: 0.2rem; /* Further reduced top margin for compactness */
+}
+
+▶️▶️▶️ADD THIS CODE◀️◀️◀️
+/* Footer Styles */
+.footer {
+    margin-top: var(--spacing-xl);
+}
+
+.footer hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-content {
+    color: var(--text-color);
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xs);
+}
+
+.version {
+    font-family: monospace;
+    background: var(--background-color);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.footer-update {
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* ====================
+Section 6 - Utilities and Helper Classes
+==================== */
+
+/* Example Utility Classes */
+.mt-1 {
+    margin-top: var(--spacing-sm);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ====================
+Section 7 - Responsive and Media Queries
+==================== */
+@media (max-width: 767px) {
+    .completed-chores {
+        background: 
+            linear-gradient(to left, var(--surface-color) 0%, transparent 2%) 100% 0,
+            linear-gradient(to right, var(--surface-color) 0%, transparent 2%) 0 0;
+        background-repeat: no-repeat;
+        background-size: 50px 100%;
+    }
+	
+    .numeric-controls {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs); /* 4px */
+    }
+
+    .numeric-controls .input-group {
+        width: 100%;
+    }
+
+    /* Ensure button controls stack vertically as well */
+    .button-controls {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs); /* 4px */
+    }
+
+    .button-controls button {
+        width: 100%;
+    }
+	
+    .footer-main {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        text-align: center;
+    }
+    
+    .footer-update {
+        text-align: center;
+    }
+
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 900px;
+        padding: var(--spacing-xl);
+    }
+
+    .button-controls {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-md);
+    }
+
+    .button-controls button {
+        width: 100%;
+        margin: 0;  /* Remove the margin we added earlier */
+    }
+
+    .export-import .buttons {
+        display: flex;
+        gap: var(--spacing-md);
+    }
+}
+
+/* ====================
+Animations
+==================== */
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ====================
+Scrollbar Styling
+==================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+/*
+=====================
+Code Organization Reference
+=====================
+This CSS file is organized into 7 distinct sections for maintainability:
+
+1. Variables and Constants
+    - Defines CSS variables (custom properties) for colors, spacing, typography, and other reusable values.
+    - Ensures consistency and simplifies global style updates.
+
+2. Reset and Base Styles
+    - Includes CSS resets to eliminate default browser styling inconsistencies.
+    - Sets foundational styles for common HTML elements like `body`, `h1`, `p`, etc.
+
+3. Layout and Grid System
+    - Manages overall layout structures using container classes, flexbox, and grid configurations.
+    - Ensures responsive and consistent layouts across different sections of the application.
+
+4. Typography
+    - Specifies font families, sizes, weights, and line heights for headings, paragraphs, and other text elements.
+    - Maintains consistent text styling throughout the application.
+
+5. Components and UI Elements
+    - Styles individual UI components such as buttons, forms, inputs, lists, tables, tags, and other reusable elements.
+    - Encapsulates styles for discrete parts of the user interface.
+
+6. Utilities and Helper Classes
+    - Provides utility classes for common styling patterns like margins, padding, text alignment, and display properties.
+    - Facilitates quick and consistent styling without repetitive code.
+
+7. Responsive and Media Queries
+    - Contains media queries to adapt styles for various screen sizes and devices.
+    - Ensures the application is mobile-friendly and visually consistent across different viewports.
+
+=====================
+Last Updated: 2024-11-03
+=====================
+*/
