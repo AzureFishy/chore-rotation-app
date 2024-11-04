@@ -1,184 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- ====================
-Section 1 - Document Structure
-==================== -->
 <head>
-    <!-- ====================
-    Section 2 - Head Elements
-    ==================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="A deterministic chore rotation system to manage and track weekly tasks efficiently.">
-    <title>Chore Rotation System</title>
+    <title>Weekly Chore Assignment</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="fixed-message-container"></div>
+
     <div class="container">
-        <!-- ====================
-        Section 3 - Header
-        ==================== -->
-		<header role="banner">
-			<h1>Weekly Chore Assignment</h1>
-			<p>Manage and track your household chores efficiently.</p>
-		</header>
-        
-        <!-- ====================
-        Section 4 - Chore Controls
-        ==================== -->
-        <!-- Updated week-info section -->
-        <div class="week-info">
-            <div class="numeric-controls">
-                <div class="input-group">
-                    <label for="set-cycle">Cycle:</label>
-                    <input type="number" id="set-cycle" min="1" value="1">
-                </div>
-                <div class="input-group">
-                    <label for="set-week">Week:</label>
-                    <input type="number" id="set-week" min="1" value="1">
-                </div>
-                <div class="input-group">
-                    <label for="seed-input">Seed:</label>
-                    <input type="number" id="seed-input" value="1">
-                </div>
-                <div class="input-group">
-					<label for="start-date">Start Date:</label>
-					<input type="date" id="start-date" aria-label="Start Date">
-                </div>
-            </div>
-            <div class="button-controls">
-                <button id="today-button">Today</button>
-                <button id="reset-button">Reset</button>
-                <button id="assign-button">Assign New Chores</button>
-            </div>
-        </div>
+        <!-- Header -->
+        <header class="gradient-header">
+            <h1>Chore Rotation App</h1>
+            <p>Manage and track your household chores efficiently</p>
+        </header>
 
-        <!-- ====================
-        Section 5 - Display Sections
-        ==================== -->
-        <div class="history">
-            <h2>Recent History</h2>
-            <div id="history-list"></div>
-        </div>
-        <div class="completed-chores">
-            <h2>Chores Completed This Cycle</h2>
-            <div id="completed-chores-list"></div>
-        </div>
-        <div class="settings">
-            <h2>Settings</h2>
-            <div class="settings-section">
-                <h3>People (<span id="people-count">0</span>)</h3>
-                <input type="text" id="new-person" placeholder="Add new person">
-                <button id="add-person-button">Add Person</button>
-                <div id="people-list" class="tags-container"></div>
+        <!-- Controls Section -->
+        <section class="grid-2">
+            <!-- Week Info Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Current Week</h2>
+                </div>
+                <div class="controls-grid">
+                    <div class="input-group">
+                        <label for="set-cycle">Cycle</label>
+                        <input type="number" id="set-cycle" min="1" value="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="set-week">Week</label>
+                        <input type="number" id="set-week" min="1" value="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="seed-input">Seed</label>
+                        <input type="number" id="seed-input" value="1">
+                    </div>
+                    <div class="input-group">
+						<label for="start-date">Start Date:</label>
+						<input type="date" id="start-date" name="start-date" />
+                    </div>
+                </div>
             </div>
-            <div class="settings-section">
-                <h3>Chores (<span id="chores-count">0</span>)</h3>
-                <input type="text" id="new-chore" placeholder="Add new chore">
-                <button id="add-chore-button">Add Chore</button>
-                <div id="chores-list" class="tags-container"></div>
-            </div>
-			<div class="settings-section">
-				<h3>Display Settings</h3>
-				<div class="input-group">
-					<input type="checkbox" id="show-dates-checkbox">
-					<label for="show-dates-checkbox">Show dates on chores</label>
-				</div>
-			</div>
-        </div>
-        <div class="export-import">
-            <h2>Export/Import Settings</h2>
-            <textarea id="export-import-text" rows="6" placeholder="Raking, Shoveling, Gardening&#10;Steve, Mary, Sue&#10;2,1,1"></textarea>
-            <div class="buttons">
-                <button id="copy-button">Copy to Clipboard</button>
-                <button id="apply-button">Apply</button>
-            </div>
-        </div>
 
-        <!-- ====================
-        Section 6 - Instructions Section
-        ==================== -->
-        <div class="instructions-section">
-            <a href="#" id="toggle-instructions">Instructions ▲</a>
+            <!-- Action Buttons Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Controls</h2>
+                </div>
+                <div class="button-controls">
+                    <button id="today-button" class="btn">Today</button>
+                    <button id="reset-button" class="btn btn-secondary">Reset</button>
+                    <button id="assign-button" class="btn btn-primary">Assign New Chores</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Recent History</h2>
+            </div>
+            <div id="history-list" class="history-list"></div>
+        </section>
+
+        <!-- Completed Chores Section -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Chores Completed This Cycle</h2>
+            </div>
+            <div id="completed-chores-list" class="table-container"></div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="grid-2">
+            <!-- People Settings -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>People (<span id="people-count">0</span>)</h2>
+                </div>
+                <div id="people-list" class="tags-container">
+                    <div id="add-person-section" class="add-section">
+                        <div class="add-chip">+ Add Person</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chores Settings -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Chores (<span id="chores-count">0</span>)</h2>
+                </div>
+                <div id="chores-list" class="tags-container">
+                    <div id="add-chore-section" class="add-section">
+                        <div class="add-chip">+ Add Chore</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Display Settings -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Display Settings</h2>
+            </div>
+            <div class="settings-group">
+                <div class="input-group">
+                    <input type="checkbox" id="show-dates-checkbox" checked>
+                    <label for="show-dates-checkbox">Show dates on chores</label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Export/Import Section -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Export/Import Settings</h2>
+            </div>
+            <div class="export-import-container">
+                <textarea id="export-import-text" class="export-import-text"></textarea>
+                <div class="button-group">
+                    <button id="copy-button" class="btn">Copy to Clipboard</button>
+                    <button id="apply-button" class="btn btn-secondary">Apply</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructions Section -->
+        <section class="card">
+            <button id="toggle-instructions" class="instructions-toggle">
+                Instructions ▲
+            </button>
             <div class="instructions-content">
-                <h3>Quick Start</h3>
-                <ol>
-                    <li>Add family members in the Settings section</li>
-                    <li>Add chores that need to be done regularly</li>
-                    <li>Set your preferred start date</li>
-                    <li>Click "Assign New Chores" to distribute tasks</li>
-                    <li>Use "Today" to see current assignments</li>
-                    <li>Track completion through the colored indicators</li>
-                </ol>
-                <h3>Tips & Tricks</h3>
-                <ul>
-                    <li>The system ensures everyone does each chore once per cycle</li>
-                    <li>A new cycle starts when all chores are completed by everyone</li>
-                    <li>Use the date display toggle to show/hide due dates</li>
-                    <li>Navigate to any week/cycle using the number inputs</li>
-                    <li>Changing the seed creates new fair assignments</li>
-                    <li>Recent History shows the last 7 chores per person</li>
-                    <li>Green text with dates (⇲MM/DD) shows current assignments</li>
-                    <li>Strikethrough text indicates completed chores</li>
-                    <li>Export/Import lets you backup or share your settings</li>
-                    <li>Reset starts fresh from week 1 if needed</li>
-                </ul>
+                <div class="instructions-section">
+                    <h3>Quick Start</h3>
+                    <ol>
+                        <li>Add family members in the Settings section</li>
+                        <li>Add chores that need to be done regularly</li>
+                        <li>Set your preferred start date</li>
+                        <li>Click "Assign New Chores" to distribute tasks</li>
+                        <li>Use "Today" to see current assignments</li>
+                    </ol>
+                </div>
+                <div class="instructions-section">
+                    <h3>Tips & Tricks</h3>
+                    <ul>
+                        <li>The system ensures everyone does each chore once per cycle</li>
+                        <li>A new cycle starts when all chores are completed by everyone</li>
+                        <li>Use the date display toggle to show/hide due dates</li>
+                        <li>Navigate to any week/cycle using the number inputs</li>
+                        <li>Changing the seed creates new fair assignments</li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- ====================
-        Section 7 - Footer and Scripts
-        ==================== -->
+        <!-- Footer -->
         <footer class="footer">
-            <hr>
             <div class="footer-content">
                 <div class="footer-main">
-                    <p>&copy; 2024 AzureFishy, GNU License 3.0</p>
+                    <p>© 2024 AzureFishy, GNU License 3.0</p>
                     <p class="version">Version 0.104.32</p>
                 </div>
                 <p class="footer-update">Last updated on 11/3/24 @ 9:20pm</p>
             </div>
         </footer>
     </div>
-    <script src="scripts.js" defer></script>
 
-    <!--
-    ====================
-    Code Organization Reference
-    ====================
-    This HTML file is organized into 7 distinct sections for maintainability:
+    <!-- Modals -->
+    <div id="personOverlay" class="modal-overlay">
+        <div id="addPersonModal" class="modal card">
+            <div class="card-header">
+                <h3>Add New Person</h3>
+            </div>
+            <div class="modal-content">
+                <input type="text" id="new-person" placeholder="Enter name">
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary cancel">Cancel</button>
+                    <button class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    1. Document Structure
-        - DOCTYPE declaration and opening <html> tag
-        - Language attribute setup
+    <div id="choreOverlay" class="modal-overlay">
+        <div id="addChoreModal" class="modal card">
+            <div class="card-header">
+                <h3>Add New Chore</h3>
+            </div>
+            <div class="modal-content">
+                <input type="text" id="new-chore" placeholder="Enter chore">
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary cancel">Cancel</button>
+                    <button class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<div class="modal">
+		<div class="modal-header">
+			<h3>Add New Person</h3>
+		</div>
+		<div class="modal-content">
+			<input type="text" class="modal-input" placeholder="Enter name">
+			<div class="modal-buttons">
+				<button class="btn btn-secondary">Cancel</button>
+				<button class="btn btn-primary">Add</button>
+			</div>
+		</div>
+	</div>
 
-    2. Head Elements
-        - Meta tags for character set and viewport
-        - Document title
-        - Link to external CSS stylesheet
-
-    3. Header
-        - Main header title of the application
-
-    4. Chore Controls
-        - Numeric inputs for Cycle, Week, and Seed settings
-        - Buttons for actions: Today, Reset, Assign New Chores
-
-    5. Display Sections
-        - Recent History display
-        - Completed Chores display
-        - Settings for managing People and Chores
-        - Export/Import Settings functionality
-
-    6. Instructions Section
-        - User instructions and quick start guide
-        - Tips & Tricks for effective usage
-
-    7. Footer and Scripts
-        - Footer information with copyright
-        - Inclusion of external JavaScript file
-
-    Last Updated: 2024-11-03
-    -->
+    <script src="scripts.js"></script>
 </body>
 </html>

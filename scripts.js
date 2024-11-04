@@ -107,14 +107,6 @@
 		return `${mm}/${dd}/${yy}`;
 	};
 
-	// Helper function to format dates consistently across the app
-	const formatDateSymbol = (date) => {
-		const month = date.getMonth() + 1; // Months are zero-based
-		const day = date.getDate();
-		return `(⇲${month}/${day})`;
-	};
-	
-	
 	const parseDateFromDisplay = (displayDate) => {
 		try {
 			// Handle both MM/DD/YY and DD/MM/YY formats
@@ -138,6 +130,13 @@
 			throw new Error('Invalid date format');
 		}
 	};
+
+	// Helper function to format dates consistently across the app
+	const formatDateSymbol = (date) => {
+		const month = date.getMonth() + 1; // Months are zero-based
+		const day = date.getDate();
+		return `(⇲${month}/${day})`;
+	};	
 	
     // Copy to Clipboard
     const copyToClipboard = () => {
@@ -793,7 +792,57 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
             seedInput.value = State.seed;
         }
     };
-    
+	
+	const handleAddPerson = () => {
+		const input = document.getElementById('new-person');
+		const name = input.value.trim();
+		if (name) {
+			addPerson(name);
+			hidePersonInput();
+		} else {
+			displayMessage("Please enter a name.", "error", true);
+		}
+	};
+
+	const handleAddChore = () => {
+		const input = document.getElementById('new-chore');
+		const chore = input.value.trim();
+		if (chore) {
+			addChore(chore);
+			hideChoreInput();
+		} else {
+			displayMessage("Please enter a chore.", "error", true);
+		}
+	};
+
+	const showPersonModal = () => {
+		document.getElementById('personOverlay').classList.add('visible');
+		document.getElementById('addPersonModal').classList.add('visible');
+		setTimeout(() => {
+			document.getElementById('new-person').focus();
+		}, 50);
+	};
+
+	const hidePersonInput = () => {
+		document.getElementById('personOverlay').classList.remove('visible');
+		document.getElementById('addPersonModal').classList.remove('visible');
+		document.getElementById('new-person').value = '';
+	};
+
+	const showChoreModal = () => {
+		document.getElementById('choreOverlay').classList.add('visible');
+		document.getElementById('addChoreModal').classList.add('visible');
+		setTimeout(() => {
+			document.getElementById('new-chore').focus();
+		}, 50);
+	};
+
+	const hideChoreInput = () => {
+		document.getElementById('choreOverlay').classList.remove('visible');
+		document.getElementById('addChoreModal').classList.remove('visible');
+		document.getElementById('new-chore').value = '';
+	};
+		
     /**
      * Updates the Recent History section in the UI.
      */
@@ -805,32 +854,32 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
         State.siblings.forEach(sibling => {
             const div = document.createElement('div');
             div.className = 'history-item';
-            const recentHistory = State.history[sibling].slice(-7);
+            const recentHistory = State.history[sibling].slice(-3);
             let historyText = `<strong>${sibling}:</strong> `;
     
             if (recentHistory.length === 0) {
                 historyText += 'No history yet.';
             } else {
-                historyText += recentHistory.map((chore, index) => {
-					const isCurrentAssignment = index === recentHistory.length - 1 &&
-						State.assignments.some(a => a.sibling === sibling && a.chore === chore.replace(' (Shared Assignment)', ''));
-					
-					let displayChore = chore;
+                historyText += '</strong><div class="history-assignments">' + 
+                    recentHistory.map((chore, index) => {
+                        const isCurrentAssignment = index === recentHistory.length - 1 &&
+                            State.assignments.some(a => a.sibling === sibling && a.chore === chore.replace(' (Shared Assignment)', ''));
+                        
+                        let displayChore = chore;
 
-					if (State.showDates) {
-						// Calculate how many weeks back this chore was assigned
-						const weeksBack = recentHistory.length - index - 1;
-						const { cycle, week } = getPreviousCycleAndWeek(weeksBack);
-						const endDate = calculateEndDate(cycle, week);
-						displayChore += formatDateSymbol(endDate);
-					}
+                        if (State.showDates) {
+                            const weeksBack = recentHistory.length - index - 1;
+                            const { cycle, week } = getPreviousCycleAndWeek(weeksBack);
+                            const endDate = calculateEndDate(cycle, week);
+                            displayChore += formatDateSymbol(endDate);
+                        }
 
-					if (isCurrentAssignment) {
-						return `<span class="current-assignment">${displayChore}</span>`;
-					} else {
-						return `<span class="previous-assignment">${displayChore}</span>`;
-					}
-                }).join(' → ');
+                        if (isCurrentAssignment) {
+                            return `<span class="current-assignment">${displayChore}</span>`;
+                        } else {
+                            return `<span class="previous-assignment">${displayChore}</span>`;
+                        }
+                    }).join(' → ') + '</div>';
             }
     
             div.innerHTML = historyText;
@@ -894,7 +943,7 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
     /**
      * Updates the People list in the UI.
      */
-    const updatePeopleList = () => {
+        const updatePeopleList = () => {
         const peopleCount = document.getElementById('people-count');
         if (peopleCount) {
             peopleCount.textContent = State.siblings.length;
@@ -904,29 +953,51 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
         if (!peopleList) return;
         peopleList.innerHTML = '';
     
-        State.siblings.forEach(person => {
-            const tag = document.createElement('span');
-            tag.className = 'tag';
-            tag.textContent = person;
-    
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'remove-tag';
-            removeBtn.textContent = '×';
-    
-            tag.appendChild(removeBtn);
-            removeBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent triggering the parent click
-                removePerson(person);
-            });
-    
-            peopleList.appendChild(tag);
-        });
+		// Add existing people tags
+		State.siblings.forEach(person => {
+			const tag = document.createElement('span');
+			tag.className = 'tag';
+			
+			// Create text span to prevent it from being part of the × button
+			const textSpan = document.createElement('span');
+			textSpan.textContent = person;
+			tag.appendChild(textSpan);
+
+			const removeBtn = document.createElement('button');
+			removeBtn.className = 'remove-tag';
+			removeBtn.textContent = '×';
+			removeBtn.setAttribute('aria-label', `Remove ${person}`);
+			
+			tag.appendChild(removeBtn);
+			
+			// Make the whole tag clickable
+			tag.addEventListener('click', () => {
+				removePerson(person);
+			});
+
+			peopleList.appendChild(tag);
+		});
+		
+		// Add the add person button
+		const addSection = document.createElement('div');
+		addSection.id = 'add-person-section';
+		addSection.className = 'add-section';
+
+		const addChip = document.createElement('div');
+		addChip.className = 'add-chip';
+		addChip.textContent = '+ Add Person';
+		addChip.addEventListener('click', showPersonModal);
+
+		addSection.appendChild(addChip);
+		peopleList.appendChild(addSection);
+
+
     };
     
     /**
      * Updates the Chores list in the UI.
      */
-    const updateChoresList = () => {
+   const updateChoresList = () => {
         const choresCount = document.getElementById('chores-count');
         if (choresCount) {
             choresCount.textContent = State.chores.length;
@@ -936,23 +1007,43 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
         if (!choresListElement) return;
         choresListElement.innerHTML = '';
     
-        State.chores.forEach(chore => {
-            const tag = document.createElement('span');
-            tag.className = 'tag';
-            tag.textContent = chore;
-    
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'remove-tag';
-            removeBtn.textContent = '×';
-    
-            tag.appendChild(removeBtn);
-            removeBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent triggering the parent click
-                removeChore(chore);
-            });
-    
-            choresListElement.appendChild(tag);
-        });
+		// Add existing chore tags
+		State.chores.forEach(chore => {
+			const tag = document.createElement('span');
+			tag.className = 'tag';
+			
+			// Create text span to prevent it from being part of the × button
+			const textSpan = document.createElement('span');
+			textSpan.textContent = chore;
+			tag.appendChild(textSpan);
+
+			const removeBtn = document.createElement('button');
+			removeBtn.className = 'remove-tag';
+			removeBtn.textContent = '×';
+			removeBtn.setAttribute('aria-label', `Remove ${chore}`);
+			
+			tag.appendChild(removeBtn);
+			
+			// Make the whole tag clickable
+			tag.addEventListener('click', () => {
+				removeChore(chore);
+			});
+
+			choresListElement.appendChild(tag);
+		});
+		
+       // Add the "Add Chore" section
+        const addSection = document.createElement('div');
+        addSection.id = 'add-chore-section';
+        addSection.className = 'add-section';
+        
+        const addChip = document.createElement('div');
+        addChip.className = 'add-chip';
+        addChip.textContent = '+ Add Chore';
+        addChip.addEventListener('click', showChoreModal);
+
+        addSection.appendChild(addChip);
+        choresListElement.appendChild(addSection);
     };
     
     /**
@@ -973,35 +1064,70 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
     // ====================
     // Section 7 - Event Listeners and Handlers
     // ====================
-    
+	
+   
     /**
      * Sets up all necessary event listeners for user interactions.
      */
     const setupEventListeners = () => {
-        // Add Person Button
-        const addPersonButton = document.getElementById('add-person-button');
-        if (addPersonButton) {
-            addPersonButton.addEventListener('click', () => {
-                const nameInput = document.getElementById('new-person');
-                if (nameInput) {
-                    addPerson(nameInput.value);
-                    nameInput.value = '';
-                }
-            });
-        }
-    
-        // Add Chore Button
-        const addChoreButton = document.getElementById('add-chore-button');
-        if (addChoreButton) {
-            addChoreButton.addEventListener('click', () => {
-                const choreInput = document.getElementById('new-chore');
-                if (choreInput) {
-                    addChore(choreInput.value);
-                    choreInput.value = '';
-                }
-            });
-        }
-    
+		
+		// Add click handlers for add buttons and overlays
+		const addPersonChip = document.querySelector('#add-person-section .add-chip');
+		const addChoreChip = document.querySelector('#add-chore-section .add-chip');
+
+		if (addPersonChip) {
+			addPersonChip.addEventListener('click', showPersonModal);
+		}
+
+		if (addChoreChip) {
+			addChoreChip.addEventListener('click', showChoreModal);
+		}
+
+		// Setup modal event listeners
+		const setupModalListeners = () => {
+			// Person Modal
+			const personModal = document.getElementById('addPersonModal');
+			const personOverlay = document.getElementById('personOverlay');
+			const personInput = document.getElementById('new-person');
+			const personAddButton = personModal.querySelector('button:not(.cancel)');
+			const personCancelButton = personModal.querySelector('button.cancel');
+
+			personOverlay.addEventListener('click', (e) => {
+				if (e.target === personOverlay) {
+					hidePersonInput();
+				}
+			});
+			personCancelButton.addEventListener('click', hidePersonInput);
+			personAddButton.addEventListener('click', handleAddPerson);
+			personInput.addEventListener('keyup', (e) => {
+				if (e.key === 'Enter') handleAddPerson();
+				if (e.key === 'Escape') hidePersonInput();
+			});
+			
+
+			// Chore Modal
+			const choreModal = document.getElementById('addChoreModal');
+			const choreOverlay = document.getElementById('choreOverlay');
+			const choreInput = document.getElementById('new-chore');
+			const choreAddButton = choreModal.querySelector('button:not(.cancel)');
+			const choreCancelButton = choreModal.querySelector('button.cancel');
+
+			choreOverlay.addEventListener('click', (e) => {
+				if (e.target === choreOverlay) {
+					hideChoreInput();
+				}
+			});
+			choreCancelButton.addEventListener('click', hideChoreInput);
+			choreAddButton.addEventListener('click', handleAddChore);
+			choreInput.addEventListener('keyup', (e) => {
+				if (e.key === 'Enter') handleAddChore();
+				if (e.key === 'Escape') hideChoreInput();
+			});
+		};
+
+		// Call setupModalListeners after the DOM is loaded
+		setupModalListeners();
+        
         // Assign Chores Button
 		const assignButton = document.getElementById('assign-button');
 		assignButton.addEventListener('click', () => {
@@ -1027,6 +1153,33 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
 				updateHistory();        // Re-render the history section
 			});
 		}
+		
+		// Add click handlers for overlays
+		document.getElementById('personOverlay').addEventListener('click', (e) => {
+			if (e.target.id === 'personOverlay') {
+				hidePersonInput();
+			}
+		});
+		document.getElementById('choreOverlay').addEventListener('click', (e) => {
+			if (e.target.id === 'choreOverlay') {
+				hideChoreInput();
+			}
+		});
+
+		// Add keyboard handlers for inputs
+		document.getElementById('new-person').onkeyup = function(e) {
+			if (e.key === 'Enter') addPerson();
+			if (e.key === 'Escape') hidePersonInput();
+		};
+
+		document.getElementById('new-chore').onkeyup = function(e) {
+			if (e.key === 'Enter') addChore();
+			if (e.key === 'Escape') hideChoreInput();
+		};
+
+		// Update chip click handlers
+		document.querySelector('#add-person-section .add-chip').onclick = showPersonModal;
+		document.querySelector('#add-chore-section .add-chip').onclick = showChoreModal;
 			
 		// Start Date Input Change
 		const startDateInput = document.getElementById('start-date');
