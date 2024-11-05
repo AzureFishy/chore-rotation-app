@@ -82,9 +82,23 @@
 			StateManager.updateCycleAndWeek(1, 1);
 			State.seed = 1;
 			
-			updateUI();
-			assignChores();
-		}
+			// Set Start Date to Today
+			const today = new Date();
+			const formattedToday = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+			State.startDate = formattedToday;
+			
+			// Update Start Date Picker UI
+			const startDateInput = document.getElementById('start-date');
+			if (startDateInput) {
+				startDateInput.value = formattedToday;
+			}
+			
+			// Perform "Jump to Today"
+			goToToday();
+			
+			// Display Success Message
+			displayMessage("System has been reset. Start Date set to today.", "success", true);
+			}
 	};
     
     // ====================
@@ -236,8 +250,8 @@
         State.cycleNumber = 1;
         State.week = 1;
     
-		// Use the jump function instead of manual simulation
-		jumpToWeekCycle(parsedCycle, parsedWeek);
+		// Go to today!
+		goToToday(); // Automatically navigate to today after applying settings
     
         updateUI();
         displayMessage('Settings applied successfully!', "success", true);
@@ -1187,11 +1201,8 @@ const jumpToWeekCycle = (targetCycle, targetWeek) => {
 			startDateInput.value = State.startDate;
 			startDateInput.addEventListener('change', (e) => {
 				State.startDate = e.target.value;
-				// Reset to Cycle 1, Week 1
-				StateManager.resetState();
-				StateManager.updateCycleAndWeek(1, 1);
-				assignChores();
-				displayMessage("Start date changed. Reset to Cycle 1, Week 1.", "success", true);
+				goToToday(); // Perform "Jump to Today" based on the new Start Date
+				displayMessage("Start date updated and navigated to today.", "success", true);
 			});
 		}
 		

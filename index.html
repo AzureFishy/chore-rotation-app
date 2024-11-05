@@ -14,14 +14,115 @@
         <header class="gradient-header">
             <h1>Chore Rotation App</h1>
             <p>Manage and track your household chores efficiently</p>
+            <button id="toggle-instructions" class="instructions-toggle">
+                Instructions ▲
+            </button>
+            <div class="instructions-content">
+                <div class="instructions-section">
+                    <h3>Quick Start</h3>
+						<ol>
+							<li>Click the "+ Add Person" button to <strong>input your family members</strong></li>
+							<li>Click "+ Add Chore" to <strong>add the chores</strong></li>
+							<li>So the system knows when you started, <strong>select your start date</strong></li>
+							<li>Boom!  This system will work from now on, and <strong>you can see who-does-what!</strong></li>
+							<li>Copy the Import/Export code at the bottom and <strong>save this for later!</strong></li>
+						</ol>
+					</div>
+					<div class="instructions-section">
+						<h3>Tips & Tricks</h3>
+						<ul>
+							<li><strong>Track History:</strong> Review the Recent History section to monitor past chore assignments and ensure balanced distribution over time.</li>
+							<li><strong>Customize Cycles:</strong> Adjust the cycle and week numbers to fit your household's schedule. Changing the seed will generate new chore assignments to keep things fair.</li>
+							<li><strong>Display Options:</strong> Toggle the "Show dates on chores" option to display due dates for each chore, helping family members stay on track.</li>
+						</ul>
+                </div>
+            </div>
         </header>
-
-        <!-- Controls Section -->
+				
+        <!-- Settings Section -->
         <section class="grid-2">
-            <!-- Week Info Card -->
+            <!-- People Settings -->
             <div class="card">
                 <div class="card-header">
-                    <h2>Current Week</h2>
+                    <h2>❶ Add People (<span id="people-count">0</span>)</h2>
+                </div>
+                <div id="people-list" class="tags-container">
+                    <div id="add-person-section" class="add-section">
+                        <div class="add-chip">+ Add Person</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chores Settings -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>❷ Add Chores (<span id="chores-count">0</span>)</h2>
+                </div>
+                <div id="chores-list" class="tags-container">
+                    <div id="add-chore-section" class="add-section">
+                        <div class="add-chip">+ Add Chore</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+		
+		<!-- Step 3: Set a Start Date -->
+		<section class="card">
+			<div class="card-header">
+				<h2>❸ Set a Start Date</h2>
+			</div>
+			<div class="input-group">
+				<label for="start-date">Start Date: (e.g. this Sunday)</label>
+				<input type="date" id="start-date" name="start-date" />
+			</div>
+		</section>
+		
+        <!-- Completed Chores Section -->
+        <section class="card">
+            <div class="card-header">
+                <h2>❹ Boom, your chores until the ⇲ date! 💥</h2>
+            </div>
+            <div id="completed-chores-list" class="table-container"></div>
+        </section>
+			
+        <!-- History Section -->
+        <section class="card">
+            <div class="card-header">
+                <h2>◷ History</h2>
+            </div>
+            <div id="history-list" class="history-list"></div>
+        </section>
+		
+		<!-- Button Controls -->
+		<section class="card">
+			<div class="card-header">
+				<h2>⚙ Controls</h2>
+			</div>
+			<div class="button-controls">
+					<button id="assign-button" class="btn btn-primary">Peek Next Week</button>
+					<button id="today-button" class="btn">Today</button>
+					<button id="reset-button" class="btn btn-secondary">Reset</button>
+			</div>
+		</section>
+		
+        <!-- Display Settings -->
+        <section class="card">
+            <div class="card-header">
+                <h2>⚙ Display</h2>
+            </div>
+            <div class="settings-group">
+                <div class="input-group">
+                    <input type="checkbox" id="show-dates-checkbox" checked>
+                    <label for="show-dates-checkbox">Show dates on chores</label>
+                </div>
+            </div>
+        </section>
+		
+        <!-- Controls Section -->
+        <section class="card">
+            <!-- Week Info Card -->
+                <div class="card-header">
+                    <h2>⚙ Advanced</h2>
                 </div>
                 <div class="controls-grid">
                     <div class="input-group">
@@ -36,86 +137,13 @@
                         <label for="seed-input">Seed</label>
                         <input type="number" id="seed-input" value="1">
                     </div>
-                    <div class="input-group">
-						<label for="start-date">Start Date:</label>
-						<input type="date" id="start-date" name="start-date" />
-                    </div>
                 </div>
-            </div>
-
-            <!-- Action Buttons Card -->
-            <div class="card">
-                <div class="card-header">
-                    <h2>Controls</h2>
-                </div>
-                <div class="button-controls">
-                    <button id="today-button" class="btn">Today</button>
-                    <button id="reset-button" class="btn btn-secondary">Reset</button>
-                    <button id="assign-button" class="btn btn-primary">Assign New Chores</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- History Section -->
-        <section class="card">
-            <div class="card-header">
-                <h2>Recent History</h2>
-            </div>
-            <div id="history-list" class="history-list"></div>
-        </section>
-
-        <!-- Completed Chores Section -->
-        <section class="card">
-            <div class="card-header">
-                <h2>Chores Completed This Cycle</h2>
-            </div>
-            <div id="completed-chores-list" class="table-container"></div>
-        </section>
-
-        <!-- Settings Section -->
-        <section class="grid-2">
-            <!-- People Settings -->
-            <div class="card">
-                <div class="card-header">
-                    <h2>People (<span id="people-count">0</span>)</h2>
-                </div>
-                <div id="people-list" class="tags-container">
-                    <div id="add-person-section" class="add-section">
-                        <div class="add-chip">+ Add Person</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chores Settings -->
-            <div class="card">
-                <div class="card-header">
-                    <h2>Chores (<span id="chores-count">0</span>)</h2>
-                </div>
-                <div id="chores-list" class="tags-container">
-                    <div id="add-chore-section" class="add-section">
-                        <div class="add-chip">+ Add Chore</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Display Settings -->
-        <section class="card">
-            <div class="card-header">
-                <h2>Display Settings</h2>
-            </div>
-            <div class="settings-group">
-                <div class="input-group">
-                    <input type="checkbox" id="show-dates-checkbox" checked>
-                    <label for="show-dates-checkbox">Show dates on chores</label>
-                </div>
-            </div>
         </section>
 
         <!-- Export/Import Section -->
         <section class="card">
             <div class="card-header">
-                <h2>Export/Import Settings</h2>
+                <h2>⚙ Export/Import Settings</h2>
             </div>
             <div class="export-import-container">
                 <textarea id="export-import-text" class="export-import-text"></textarea>
@@ -126,43 +154,14 @@
             </div>
         </section>
 
-        <!-- Instructions Section -->
-        <section class="card">
-            <button id="toggle-instructions" class="instructions-toggle">
-                Instructions ▲
-            </button>
-            <div class="instructions-content">
-                <div class="instructions-section">
-                    <h3>Quick Start</h3>
-                    <ol>
-                        <li>Add family members in the Settings section</li>
-                        <li>Add chores that need to be done regularly</li>
-                        <li>Set your preferred start date</li>
-                        <li>Click "Assign New Chores" to distribute tasks</li>
-                        <li>Use "Today" to see current assignments</li>
-                    </ol>
-                </div>
-                <div class="instructions-section">
-                    <h3>Tips & Tricks</h3>
-                    <ul>
-                        <li>The system ensures everyone does each chore once per cycle</li>
-                        <li>A new cycle starts when all chores are completed by everyone</li>
-                        <li>Use the date display toggle to show/hide due dates</li>
-                        <li>Navigate to any week/cycle using the number inputs</li>
-                        <li>Changing the seed creates new fair assignments</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-main">
                     <p>© 2024 AzureFishy, GNU License 3.0</p>
-                    <p class="version">Version 0.106.7</p>
+                    <p class="version">Version 0.107.1</p>
                 </div>
-                <p class="footer-update">Last updated on 11/4/24 @ 3:00pm</p>
+                <p class="footer-update">Last updated on 11/4/24 @ 5:00pm</p>
             </div>
         </footer>
     </div>
@@ -197,19 +196,6 @@
             </div>
         </div>
     </div>
-	
-	<div class="modal">
-		<div class="modal-header">
-			<h3>Add New Person</h3>
-		</div>
-		<div class="modal-content">
-			<input type="text" class="modal-input" placeholder="Enter name">
-			<div class="modal-buttons">
-				<button class="btn btn-secondary">Cancel</button>
-				<button class="btn btn-primary">Add</button>
-			</div>
-		</div>
-	</div>
 
     <script src="scripts.js"></script>
 </body>

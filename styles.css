@@ -103,6 +103,27 @@ Section 3 - Layout and Grid System
     margin-bottom: var(--spacing-xs);
 }
 
+.gradient-header p {
+    margin: 0; /* Removes default margins */
+    flex: 1; /* Allows elements to take up available space without stretching */
+}
+
+.gradient-header .instructions-toggle {
+	margin-top: 1rem;
+    color: #FFFFFF; /* Ensures white text for contrast */
+    background-color: rgba(0, 0, 0, 0.15); /* Semi-transparent background */
+    border: none; /* Removes default border */
+    padding: 0.5rem 1rem; /* Adds vertical and horizontal padding */
+    border-radius: 4px; /* Rounds the button corners */
+    cursor: pointer; /* Changes cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    font-size: 0.9rem; /* Slightly smaller font for elegance */
+}
+
+.gradient-header .instructions-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Darker background on hover */
+}
+
 .grid-2 {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -216,6 +237,7 @@ Section 5 - Components and UI Elements
 
 /* Button Controls */
 .button-controls {
+	margin-top: 1rem;
     display: grid;
     gap: var(--spacing-md);
 }
@@ -348,6 +370,7 @@ Section 5 - Components and UI Elements
 }
 
 .button-controls {
+	margin-top: 1rem;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
@@ -604,8 +627,8 @@ li button.remove-btn:hover {
 
 .instructions-content {
     display: none;
-    margin-top: var(--spacing-lg);
     animation: slideDown 0.3s ease-out;
+	color: #FFFFFF; /* Sets all text inside to white */
 }
 
 .instructions-content.show {
@@ -616,7 +639,6 @@ li button.remove-btn:hover {
     padding: var(--spacing-lg);
     /*background-color: var(--background-color);*//*Removed*/
     border-radius: var(--border-radius-sm);
-    margin-bottom: var(--spacing-lg);
 }
 
 .instructions-section:last-child {
@@ -624,15 +646,15 @@ li button.remove-btn:hover {
 }
 
 .instructions-section h3 {
-    color: var(--text-color);
-    margin-bottom: var(--spacing-md);
-    font-size: 1rem;
+    font-size: 1rem; /* Slightly smaller than main headers */
+    margin-bottom: 0.5rem; /* Adds space below the header */
 }
 
 .instructions-section ol,
 .instructions-section ul {
-    padding-left: var(--spacing-lg);
-    color: var(--text-secondary);
+    font-size: 0.8rem; /* Slightly smaller font size */
+    line-height: 1.4; /* Tighter line spacing */
+    margin-left: 1.5rem; /* Indent lists for better structure */
 }
 
 .instructions-section li {
@@ -641,6 +663,11 @@ li button.remove-btn:hover {
     padding: var(--spacing-xs) 0;
     margin: 0;
     display: list-item;
+}
+
+.instructions-section ol li,
+.instructions-section ul li {
+    margin-bottom: 0.1rem; /* Reduces space between list items */
 }
 
 .instructions-section li:hover {
@@ -1153,9 +1180,10 @@ Section 7 - Responsive and Media Queries
 
     /* Ensure button controls stack vertically as well */
     .button-controls {
+		margin-top:1rem;
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-xs); /* 4px */
+        gap: var(--spacing-sm); /* 8px? */
     }
 
     .button-controls button {
